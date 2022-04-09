@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import tmi from 'tmi.js';
 import commands from './commandLoader.js';
+import isAuthorized from './auth.js';
 
 const client = new tmi.Client({
     options: { debug: false },
@@ -24,27 +25,12 @@ client.on('message', (channel, tags, message, self) => {
         return;
     }
 
-    if (isAuthorized(tags, command.auth)) {
-        command.execute(client, channel, tags, message, args);
+    if (!isAuthorized(tags, command.auth)) {
+        return;
     }
 
+    command.execute(client, channel, tags, message, args);
 });
-
-
-const isAuthorized = (tags, auths) => {
-    let authorized = true;
-    auths.every(auth => {
-        switch (auth) {
-            case 'owner':
-                authorized = tags.username === 'wicky_woo'
-                break;
-            case 'subscriber':
-                authorized = tags.subscriber
-                break;
-        }
-    })
-    return authorized;
-}
 
 client.on('join', (channel, username) => {
     console.log(`${username} has joined the chat.`);
