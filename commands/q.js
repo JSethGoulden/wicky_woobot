@@ -1,8 +1,8 @@
 export default {
     name: 'q',
     auth: ['owner'],
-    execute(client, channel, tags, message, args) {
-        const delay = 1500;
+    async execute(client, channel, tags, message, args) {
+        const delay = args[0] ?? 1500;
         const sleep = ms => { return new Promise(resolve => setTimeout(resolve, ms)) }
 
         const countDown = async i => {
@@ -13,6 +13,7 @@ export default {
             }
             client.say(channel, 'Queue up!!')
         }
-        countDown(3);
+        let counter = countDown(3);
+        return counter.then(resolve => resolve);
     }
 }

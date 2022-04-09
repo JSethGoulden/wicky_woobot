@@ -15,19 +15,16 @@ const client = new tmi.Client({
 client.connect();
 
 client.on('message', (channel, tags, message, self) => {
+    if (tags.username === "wicky_woo" && message.toLowerCase() === "good bot") return client.say(channel, "AYAYA")
     if (self || !message.startsWith('!')) return;
 
     const args = message.slice(1).split(' ');
     const commandString = args.shift().toLowerCase();
     const command = commands[commandString];
 
-    if (!command) {
-        return;
-    }
+    if (!command) return;
 
-    if (!isAuthorized(tags, command.auth)) {
-        return;
-    }
+    if (!isAuthorized(tags, command.auth)) return;
 
     command.execute(client, channel, tags, message, args);
 });
