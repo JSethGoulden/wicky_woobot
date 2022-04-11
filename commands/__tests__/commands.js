@@ -40,4 +40,4 @@ describe('chat commands', () => {
             expect(client.say.mock.results[0].value).not.toBe('Vod not found NotLikeThis');
         })
     })
-});
+}); 
