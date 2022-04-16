@@ -1,4 +1,7 @@
 export default {
+    /* begin custom bot additions */
+    "eatsaoe": 1,
+    /* end custo mbot additions */
     "1174": 253,
     "1291": 182,
     "2020": 7648,
