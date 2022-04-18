@@ -39,14 +39,19 @@ const displayRealChatUsers = async () => {
     console.clear();
     console.log('---Chat List ---');
     const response = await fetch('https://tmi.twitch.tv/group/user/wicky_woo/chatters');
-    let activeViewers = await response.json();
-    activeViewers = activeViewers.chatters.viewers;
+    const activeViewers = await response.json();
+    const moderators = activeViewers.chatters.moderators;
+    const viewers = activeViewers.chatters.viewers;
 
-    const filtered = activeViewers.filter(viewer => !bots[viewer]);
+    const filtered = viewers.filter(viewer => !bots[viewer]);
 
-    filtered.forEach(viewer => console.log(viewer));
+    console.log('--Mods--');
+    moderators.forEach(mod => console.log(`${mod}`));
 
-    console.log(`${activeViewers.length - filtered.length} known bot(s) were hidden`);
+    console.log('--Viewers--');
+    filtered.forEach(viewer => console.log(`${viewer}`));
+
+    console.log(`${viewers.length - filtered.length} known bot(s) were hidden`);
 }
 
 setInterval(displayRealChatUsers, 1000 * 60 * 1);
