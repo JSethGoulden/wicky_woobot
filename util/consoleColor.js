@@ -1,4 +1,4 @@
-const log = (color, message) => {
+const consoleColor = (color, message) => {
     const colors = {
         default: "\u001b[0m",
         red: "\u001b[31m",
@@ -10,7 +10,7 @@ const log = (color, message) => {
 
     if (!colors[color]) color = 'default';
 
-    console.log(`${colors[color]}${message}${colors.default}`);
+    return `${colors[color]}${message}${colors.default}`;
 }
 
-export default log;
+export default consoleColor;

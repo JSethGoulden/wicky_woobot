@@ -4,7 +4,7 @@ import commands from './commandLoader.js';
 import isAuthorized from './auth.js';
 import fetch from 'node-fetch';
 import bots from './bots.js';
-import log from './util/terminal_colors.js';
+import consoleColor from './util/consoleColor.js';
 
 const client = new tmi.Client({
     options: { debug: false },
@@ -39,18 +39,16 @@ client.on('join', (channel, username) => {
 const displayRealChatUsers = async () => {
     console.clear();
     console.log('---Chat List ---');
+
     const response = await fetch('https://tmi.twitch.tv/group/user/wicky_woo/chatters');
-    const activeViewers = await response.json();
-    const moderators = activeViewers.chatters.moderators;
-    const viewers = activeViewers.chatters.viewers;
+    const chat = await response.json();
+    const filteredViewers = chat.chatters.viewers.filter(viewer => !bots[viewer]);
 
-    const filtered = viewers.filter(viewer => !bots[viewer]);
+    chat.chatters.moderators.forEach(mod => console.log(consoleColor('cyan', mod)));
 
-    moderators.forEach(mod => log('cyan', mod));
+    filteredViewers.forEach(viewer => console.log(consoleColor('default', viewer)));
 
-    filtered.forEach(viewer => log('default', viewer));
-
-    console.log(`${viewers.length - filtered.length} known bot(s) were hidden`);
+    console.log(`${consoleColor('red', chat.chatters.viewers.length - filteredViewers.length)} known bot(s) were hidden`);
 }
 
 setInterval(displayRealChatUsers, 1000 * 60 * 1);
