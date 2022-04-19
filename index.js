@@ -4,6 +4,7 @@ import commands from './commandLoader.js';
 import isAuthorized from './auth.js';
 import fetch from 'node-fetch';
 import bots from './bots.js';
+import log from './util/terminal_colors.js';
 
 const client = new tmi.Client({
     options: { debug: false },
@@ -45,11 +46,9 @@ const displayRealChatUsers = async () => {
 
     const filtered = viewers.filter(viewer => !bots[viewer]);
 
-    console.log('--Mods--');
-    moderators.forEach(mod => console.log(`${mod}`));
+    moderators.forEach(mod => log('cyan', mod));
 
-    console.log('--Viewers--');
-    filtered.forEach(viewer => console.log(`${viewer}`));
+    filtered.forEach(viewer => log('default', viewer));
 
     console.log(`${viewers.length - filtered.length} known bot(s) were hidden`);
 }
