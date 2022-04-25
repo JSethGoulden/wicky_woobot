@@ -11,7 +11,6 @@ export default {
         loadout.character = getRandomElement(characters);
 
         let weaponsArr = weapons.slice();
-
         loadout.weapon1 = getRandomElement(weaponsArr);
 
         //no duplicate weapons
@@ -25,11 +24,8 @@ export default {
         }
 
         loadout.weapon2 = getRandomElement(weaponsArr);
-
         loadout.offense = getRandomElement(offenseAbilities);
-
         loadout.support = getRandomElement(supportAbilities);
-
         loadout.movement = getRandomElement(movementAbilities);
 
         client.say(channel, `${loadout.character.name} - ${loadout.weapon1.name} - ${loadout.weapon2.name} - 

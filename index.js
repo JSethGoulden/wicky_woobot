@@ -29,7 +29,6 @@ client.on('message', (channel, tags, message, self) => {
     const command = commands[commandString];
 
     if (!command) return;
-
     if (!isAuthorized(tags, command.auth)) return;
 
     command.execute(client, channel, tags, message, args);
