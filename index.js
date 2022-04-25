@@ -1,10 +1,13 @@
 import 'dotenv/config';
 import tmi from 'tmi.js';
+import fetch from 'node-fetch';
 import commands from './commandLoader.js';
 import isAuthorized from './auth.js';
-import fetch from 'node-fetch';
 import bots from './bots.js';
+import initRealmApi from './realmApi.js';
 import consoleColor from './util/consoleColor.js';
+
+const channel = 'wicky_woo';
 
 const client = new tmi.Client({
     options: { debug: false },
@@ -12,13 +15,13 @@ const client = new tmi.Client({
         username: process.env.BOT_USERNAME,
         password: process.env.BOT_PASSWORD
     },
-    channels: ['wicky_woo'],
+    channels: [channel],
 });
 
 client.connect();
 
 client.on('message', (channel, tags, message, self) => {
-    if (tags.username === "wicky_woo" && message.toLowerCase() === "good bot") return client.say(channel, "AYAYA")
+    if (tags.username === 'wicky_woo' && message.toLowerCase() === 'good bot') return client.say(channel, 'AYAYA')
     if (self || !message.startsWith('!')) return;
 
     const args = message.slice(1).split(' ');
@@ -36,12 +39,25 @@ client.on('join', (channel, username) => {
     console.log(`${username} has joined the chat.`);
 });
 
+client.on('connected', () => {
+    initRealmApi(client, channel);
+});
+
 const displayRealChatUsers = async () => {
     console.clear();
     console.log('---Chat List ---');
 
     const response = await fetch('https://tmi.twitch.tv/group/user/wicky_woo/chatters');
-    const chat = await response.json();
+    let chat = false;
+
+    try {
+        chat = await response.json();
+    } catch (e) {
+        return console.log(`Failed to parse twich response with error ${e}`);
+    }
+
+    if (!chat) return;
+
     const filteredViewers = chat.chatters.viewers.filter(viewer => !bots[viewer]);
 
     chat.chatters.moderators.forEach(mod => console.log(consoleColor('cyan', mod)));
