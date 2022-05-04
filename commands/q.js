@@ -6,12 +6,13 @@ export default {
         const sleep = ms => { return new Promise(resolve => setTimeout(resolve, ms)) }
 
         const countDown = async i => {
-            client.say(channel, 'Queues are starting soon!')
+            client.say(channel, 'Queues are starting soon!');
+            await sleep(delay);
             while (i > 0) {
-                client.say(channel, `${i--}...`)
+                client.say(channel, `${i--}...`);
                 await sleep(delay);
             }
-            client.say(channel, 'Queue up!!')
+            client.say(channel, 'Queue up!!');
         }
         let counter = countDown(3);
         return counter.then(resolve => resolve);

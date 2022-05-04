@@ -40,6 +40,7 @@ client.on('join', (channel, username) => {
 
 client.on('connected', () => {
     initRealmApi(client, channel);
+    setInterval(displayRealChatUsers, 1000 * 60 * 1);
 });
 
 const displayRealChatUsers = async () => {
@@ -66,4 +67,3 @@ const displayRealChatUsers = async () => {
     console.log(`${consoleColor('red', chat.chatters.viewers.length - filteredViewers.length)} known bot(s) were hidden`);
 }
 
-setInterval(displayRealChatUsers, 1000 * 60 * 1);
